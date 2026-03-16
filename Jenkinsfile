@@ -2,6 +2,12 @@ node {
 
     def mavenHome = tool name: 'maven-latest'
 
+    echo "the node name is: --> ${env.NODE_NAME}"
+
+    echo "the job name is: --> ${env.JOB_NAME}"
+
+    echo "this build number is: --> ${env.BUILD_NUMBER}"
+
     // Checkout stage
     stage('Checkout Code') {
         git branch: 'main', url: 'https://github.com/0xSaurabh/java-maven-test.git'
