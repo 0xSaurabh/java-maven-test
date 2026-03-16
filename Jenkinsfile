@@ -8,6 +8,8 @@ node {
 
     echo "this build number is: --> ${env.BUILD_NUMBER}"
 
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))])
+
     // Checkout stage
     stage('Checkout Code') {
         git branch: 'main', url: 'https://github.com/0xSaurabh/java-maven-test.git'
