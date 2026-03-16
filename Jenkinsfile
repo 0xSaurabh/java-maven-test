@@ -11,7 +11,7 @@ pipeline {
         // Checkout stage
         stage('Checkout') {
             steps {
-                git 'https://github.com/0xSaurabh/java-maven-test.git'
+                git branch: 'main', url: 'https://github.com/0xSaurabh/java-maven-test.git'
             }
         }
 
