@@ -1,38 +1,32 @@
-node{
+node {
 
-def maven = tool name: "latest"
+    def mavenHome = tool name: 'maven-latest'
 
-echo "node running name: ${env.NODE_NAME} "
+    // Checkout stage
+    stage('Checkout Code') {
+        git branch: 'main', url: 'https://github.com/0xSaurabh/java-maven-test.git'
+    }
 
-echo "job name:  ${env.JOB_NAME} "
-
-properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '5', numToKeepStr: '5'))])
-properties([pipelineTriggers([pollSCM('* * * * *')])])
-
-buildName 'Dev - ${BUILD_NUMBER}'
-
-buildDescription 'this is for testing pipeline for oct batch'
-
-//checkout stage
-stage('checkout'){
-
-  git 'https://github.com/sanchitraj5/maven-java-oct.git'
-}
-//build stage
-stage('building'){
-sh "$maven/bin/mvn clean package"
+    // Build stage
+    stage('Build') {
+        sh "${mavenHome}/bin/mvn clean package"
+    }
 /*
-//sonarqube report
-stage ('sonarqubereport'){
-sh "$maven/bin/mvn sonar:sonar"
-}
+    // SonarQube analysis
+    stage('SonarQube Analysis') {
+        sh "${mavenHome}/bin/mvn sonar:sonar"
+    }
 
+    // Upload artifact to Nexus
+    stage('Upload to Nexus') {
+        sh "${mavenHome}/bin/mvn deploy"
+    }
 
-//upload nexus
-stage ('nexus upload'){
-sh "$maven/bin/mvn deploy"
-}
+    // Deploy to Tomcat
+    stage('Deploy to Tomcat') {
+        sshagent(['aa814d68-d0e8-4d0b-b07d-5cb3c8e0fdd0']) {
+            sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15.206.89.91:/opt/apache-tomcat-9.0.115/webapps"
+        }
+    }
 */
-
 }
-}//Node closing
